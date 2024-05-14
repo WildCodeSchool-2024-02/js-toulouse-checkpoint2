@@ -41,6 +41,7 @@ someCupcakes.push(
 function CupcakeList() {
   const cupcakes = useLoaderData();
   const [accessories, setAccessories] = useState([]);
+  const [selectedAccessory, setSelectedAccessory] = useState("");
 
   useEffect(() => {
     const fetchAccessories = async () => {
@@ -57,10 +58,19 @@ function CupcakeList() {
     };
 
     fetchAccessories();
-  }, []); // Empty dependency array ensures this effect runs once when the component mounts
+  }, []);
+  const handleAccessoryChange = (event) => {
+    setSelectedAccessory(event.target.value);
+  };
+
+  const filteredCupcakes = selectedAccessory
+    ? cupcakes.filter((cupcake) => cupcake.accessory_id === selectedAccessory)
+    : cupcakes;
 
   console.info("Fetched cupcakes:", cupcakes);
   console.info("Fetched accessories:", accessories);
+  console.info("Selected accessory:", selectedAccessory);
+  console.info("Filtered cupcakes:", filteredCupcakes);
 
   return (
     <>
@@ -68,7 +78,11 @@ function CupcakeList() {
       <form className="center">
         <label htmlFor="cupcake-select">
           Filter by{" "}
-          <select id="cupcake-select">
+          <select
+            id="cupcake-select"
+            value={selectedAccessory}
+            onChange={handleAccessoryChange}
+          >
             <option value="">---</option>
             {accessories.map((accessory) => (
               <option key={accessory.id} value={accessory.id}>
@@ -79,7 +93,7 @@ function CupcakeList() {
         </label>
       </form>
       <ul className="cupcake-list" id="cupcake-list">
-        {cupcakes.map((cupcake) => (
+        {filteredCupcakes.map((cupcake) => (
           <li className="cupcake-item" key={cupcake.id}>
             <Cupcake data={cupcake} />
           </li>
