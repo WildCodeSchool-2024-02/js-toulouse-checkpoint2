@@ -1,11 +1,9 @@
 import "./CupecakeDetails.css";
-import { useParams, useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import Cupcake from "../components/Cupcake";
 
 function CupCakeDetails() {
-  const { id } = useParams();
-  const fetchedCupCakes = useLoaderData();
-  const cake = fetchedCupCakes.find((el) => el.id.toString() === id);
+  const cake = useLoaderData();
 
   return (
     <>

@@ -31,7 +31,12 @@ const router = createBrowserRouter([
       {
         path: "/cupcakes/:id",
         element: <CupCakeDetails />,
-        loader: async () => fetch("http://localhost:3310/api/cupcakes"),
+        loader: async ({ params }) => {
+          const reponse = await fetch("http://localhost:3310/api/cupcakes");
+          const data = await reponse.json();
+          const obj = data.find((el) => el.id.toString() === params.id);
+          return obj;
+        },
       },
     ],
   },
