@@ -1,7 +1,6 @@
 import { useLoaderData } from "react-router-dom";
-import Cupcake from "../components/Cupcake";
-
 /* ************************************************************************* */
+
 const someCupcakes = [];
 someCupcakes.push(
   {
@@ -38,6 +37,9 @@ someCupcakes.push(
 /* ************************************************************************* */
 
 function CupcakeList() {
+  const cupcakes = useLoaderData();
+
+  console.info("Fetched cupcakes:", cupcakes);
   // Step 1: get all cupcakes
   console.info(useLoaderData());
 
@@ -61,9 +63,12 @@ function CupcakeList() {
       <ul className="cupcake-list" id="cupcake-list">
         {/* Step 2: repeat this block for each cupcake */}
         {/* Step 5: filter cupcakes before repeating */}
-        <li className="cupcake-item">
-          <Cupcake />
-        </li>
+        {cupcakes.map((cupcake) => (
+          <li className="cupcake-item" key={cupcake.id}>
+            {cupcake.accessory}
+          </li>
+        ))}
+
         {/* end of block */}
       </ul>
     </>
