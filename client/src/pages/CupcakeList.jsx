@@ -30,7 +30,7 @@ someCupcakes.push(
     color2: "blue",
     color3: "blue",
     name: "Sweden",
-  }
+  },
 );
 
 /* you can use someCupcakes if you're stucked on step 1 */
