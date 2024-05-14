@@ -40,7 +40,7 @@ someCupcakes.push(
 
 function CupcakeList() {
   // Step 1: get all cupcakes
-  console.info(useLoaderData());
+  const cupcakes = useLoaderData();
 
   // Step 3: get all accessories
   const [accessories, setAccessories] = useState([]);
@@ -48,41 +48,45 @@ function CupcakeList() {
   useEffect(() => {
     fetch("http://localhost:3310/api/accessories")
       .then((res) => res.json())
-      .then((data) => setAccessories(data))
-      .then((err) => console.error(err));
+      .then((data) => setAccessories(data));
   }, []);
-  console.info(accessories);
+
   // Step 5: create filter state
+  const [selectedAccessory, setSelectedAccessory] = useState("");
+  const handleCupcakeChange = (event) => {
+    setSelectedAccessory(event.target.value);
+  };
+
+  const filteredCupcakes = selectedAccessory
+    ? cupcakes.filter((cupcake) => cupcake.accessory_id === selectedAccessory)
+    : cupcakes;
 
   return (
     <>
       <h1>My cupcakes</h1>
       <form className="center">
         <label htmlFor="cupcake-select">
-          {/* Step 5: use a controlled component for select */}
           Filter by{" "}
-          <select id="cupcake-select">
+          <select
+            id="cupcake-select"
+            value={selectedAccessory}
+            onChange={handleCupcakeChange}
+          >
             <option value="">---</option>
             {accessories.map((accessory) => (
-              <option value="" key={accessories.id}>
+              <option value={accessory.id} key={accessories.id}>
                 {accessory.name}
               </option>
             ))}
-
-            {/* Step 4: add an option for each accessory */}
           </select>
         </label>
       </form>
       <ul className="cupcake-list" id="cupcake-list">
-        {/* Step 2: repeat this block for each cupcake */}
-        {useLoaderData().map((cupcake) => (
+        {filteredCupcakes.map((cupcake) => (
           <li className="cupcake-item" key={cupcake.id}>
             <Cupcake data={cupcake} />
           </li>
         ))}
-        {/* Step 5: filter cupcakes before repeating */}
-
-        {/* end of block */}
       </ul>
     </>
   );
