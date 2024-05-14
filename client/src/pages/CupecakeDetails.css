@@ -1,0 +1,11 @@
+ul,
+li {
+  list-style-type: none;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

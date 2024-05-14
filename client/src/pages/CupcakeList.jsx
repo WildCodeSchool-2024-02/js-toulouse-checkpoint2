@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Cupcake from "../components/Cupcake";
 
@@ -72,7 +72,9 @@ function CupcakeList() {
           )
           .map((el) => (
             <li key={el.id} className="cupcake-item">
-              <Cupcake data={el} />
+              <Link to={el.id.toString()} details={el}>
+                <Cupcake data={el} />
+              </Link>
             </li>
           ))}
       </ul>
