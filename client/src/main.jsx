@@ -29,7 +29,7 @@ const router = createBrowserRouter([
       {
         path: "/cupcakes",
         element: <CupcakeList />,
-        loader: fetchCupcake(),
+        loader: fetchCupcake,
       },
     ],
   },
