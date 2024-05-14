@@ -1,4 +1,5 @@
 import { useLoaderData } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Cupcake from "../components/Cupcake";
 
 /* ************************************************************************* */
@@ -38,33 +39,42 @@ someCupcakes.push(
 /* ************************************************************************* */
 
 function CupcakeList() {
-  // Step 1: get all cupcakes
-  console.info(useLoaderData());
-
-  // Step 3: get all accessories
-
-  // Step 5: create filter state
+  const [accessories, setAccessories] = useState([]);
+  const [selectedAccesories, setSelectedAccesories] = useState("");
+  const fetchedCupCakes = useLoaderData();
+  useEffect(() => {
+    fetch("http://localhost:3310/api/accessories")
+      .then((response) => response.json())
+      .then((data) => setAccessories(data))
+      .catch((e) => console.error(e));
+  }, []);
 
   return (
     <>
       <h1>My cupcakes</h1>
       <form className="center">
         <label htmlFor="cupcake-select">
-          {/* Step 5: use a controlled component for select */}
-          Filter by{" "}
-          <select id="cupcake-select">
+          Filter by
+          <select id="cupcake-select" onChange={(e) => setSelectedAccesories(e.target.value)}>
             <option value="">---</option>
-            {/* Step 4: add an option for each accessory */}
+            {accessories?.map((el) => (
+              <option key={el.id} value={el.slug}>
+                {el.slug}
+              </option>
+            ))}
           </select>
         </label>
       </form>
       <ul className="cupcake-list" id="cupcake-list">
-        {/* Step 2: repeat this block for each cupcake */}
-        {/* Step 5: filter cupcakes before repeating */}
-        <li className="cupcake-item">
-          <Cupcake />
-        </li>
-        {/* end of block */}
+        {fetchedCupCakes
+          ?.filter((cake) =>
+            selectedAccesories === "" ? cake : cake.accessory === selectedAccesories,
+          )
+          .map((el) => (
+            <li key={el.id} className="cupcake-item">
+              <Cupcake data={el} />
+            </li>
+          ))}
       </ul>
     </>
   );
