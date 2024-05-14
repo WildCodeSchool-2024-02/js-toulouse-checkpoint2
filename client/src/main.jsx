@@ -9,17 +9,6 @@ import Home from "./pages/Home";
 import Instructions from "./pages/Instructions";
 import CupcakeList from "./pages/CupcakeList";
 
-// const getCupCake = () => {
-//   let fetchedData = null;
-//   fetch("http://localhost:3310/api/cupcakes")
-//     .then((response) => response.json())
-//     .then((data) => (fetchedData = data))
-//     .catch((e) => console.error(e))
-//     .finally(() => console.info("Requete terminée"));
-
-//   return fetchedData;
-// };
-
 const router = createBrowserRouter([
   {
     path: "/",
