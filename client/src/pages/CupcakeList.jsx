@@ -57,7 +57,7 @@ function CupcakeList() {
       .catch((error) => console.error(error));
   }, []);
   // Step 5: create filter state
-  const [selectedAccessory, setSelectedAccessory] = useState(" ");
+  const [selectedAccessory, setSelectedAccessory] = useState(0);
   const filteredCupcakes = selectedAccessory
     ? cupcakes.filter((cupcake) => cupcake.accessory_id === selectedAccessory)
     : cupcakes;
@@ -71,8 +71,10 @@ function CupcakeList() {
           Filter by{" "}
           <select
             id="cupcake-select"
+            value={selectedAccessory}
             onChange={(e) => setSelectedAccessory(e.target.value)}
           >
+            <option value="">---</option>
             {accessories.map((accessory) => (
               <option key={accessory.id} value={accessory.id}>
                 {accessory.name}
