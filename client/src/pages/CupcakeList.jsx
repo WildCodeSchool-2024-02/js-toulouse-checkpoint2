@@ -1,70 +1,65 @@
 import { useLoaderData } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Cupcake from "../components/Cupcake";
 
-/* ************************************************************************* */
-const someCupcakes = [];
-someCupcakes.push(
-  {
-    id: 10,
-    accessory_id: "4",
-    accessory: "wcs",
-    color1: "blue",
-    color2: "white",
-    color3: "red",
-    name: "France",
-  },
-  {
-    id: 11,
-    accessory_id: "4",
-    accessory: "wcs",
-    color1: "yellow",
-    color2: "red",
-    color3: "black",
-    name: "Germany",
-  },
-  {
-    id: 27,
-    accessory_id: "5",
-    accessory: "christmas-candy",
-    color1: "yellow",
-    color2: "blue",
-    color3: "blue",
-    name: "Sweden",
-  }
-);
-
-/* you can use someCupcakes if you're stucked on step 1 */
-/* if you're fine with step 1, just ignore this ;) */
-/* ************************************************************************* */
-
 function CupcakeList() {
-  // Step 1: get all cupcakes
-  console.info(useLoaderData());
+  const cupcakes = useLoaderData();
+  console.info(cupcakes);
 
-  // Step 3: get all accessories
+  const [data, setData] = useState([]);
 
-  // Step 5: create filter state
+  async function fetchData() {
+    try {
+      const reponse = await fetch("http://localhost:3310/api/accessories", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
+      const res = await reponse.json();
+      setData(res);
+      console.info(res);
+    } catch (erreur) {
+      console.error("Erreur :", erreur);
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const [taste, setTaste] = useState("---");
   return (
     <>
       <h1>My cupcakes</h1>
       <form className="center">
         <label htmlFor="cupcake-select">
-          {/* Step 5: use a controlled component for select */}
-          Filter by{" "}
-          <select id="cupcake-select">
+          Filter by
+          <select
+            id="cupcake-select"
+            value={taste}
+            onChange={(e) => setTaste(e.target.value)}
+          >
             <option value="">---</option>
-            {/* Step 4: add an option for each accessory */}
+            {data &&
+              data.map((item) => (
+                <option key={item.id} value={item.slug}>
+                  {item.name}
+                </option>
+              ))}
           </select>
         </label>
       </form>
       <ul className="cupcake-list" id="cupcake-list">
-        {/* Step 2: repeat this block for each cupcake */}
-        {/* Step 5: filter cupcakes before repeating */}
-        <li className="cupcake-item">
-          <Cupcake />
-        </li>
-        {/* end of block */}
+        {cupcakes &&
+          cupcakes
+            .filter((obj) => (taste === "" ? obj : obj.accessory === taste))
+            .map((cupcake) => (
+              <li className="cupcake-item" key={cupcake.id}>
+                <Cupcake data={cupcake} />
+              </li>
+            ))}
       </ul>
     </>
   );
